@@ -1,0 +1,24 @@
+!-- "!--" indicates a comment line and will be ignored
+!-- blank lines are also ignored
+
+!-- general settings
+source,csv
+output,jpeg
+max_ticks,15
+chart_type,category_calls_time
+
+!-- trim settings
+trim,0
+trim_threshold,5
+
+!-- multi-service settings
+service_list,
+seperate_charts,
+
+!--csv settings
+csv_input_file,C:/Users/Alex/Documents/GitHub/arcadia_chart_test/data/monitor.csv
+
+!--jpeg settings
+jpeg_output_file,C:/Users/Alex/Documents/GitHub/arcadia_chart_test/data/output.jpeg
+jpeg_width,500
+jpeg_height,500

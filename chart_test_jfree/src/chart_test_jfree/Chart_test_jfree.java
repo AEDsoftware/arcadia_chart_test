@@ -23,7 +23,7 @@ public class Chart_test_jfree {
     private static Chart_output_base output;
     
     public static void main(String[] args) {
-        loadSettings("C:/data/settings.txt");      
+        loadSettings("C:/Users/Alex/Documents/GitHub/arcadia_chart_test/data/settings.txt");      
         Maint_row[] data = loadData();
         if(data == null){
             return;
