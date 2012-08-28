@@ -1,20 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package chart_test_jfree;
 
 import java.util.HashMap;
 import org.jfree.chart.JFreeChart;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-/**
- *
- * @author Alex
- */
-public class Chart_saver {
+// Chart_saver is a simple base class for all chart savers
+public class Chart_saver_base {
     private HashMap settings;
     
-    public void settings(HashMap settings){
+    public void setSettings(HashMap settings){
         this.settings = settings;
     }
     
@@ -22,14 +16,16 @@ public class Chart_saver {
         return settings;
     }
     
-    public Chart_saver(){
+    public Chart_saver_base(){
         
     }
     
-    public Chart_saver(HashMap settingmap){
+    public Chart_saver_base(HashMap settingmap){
         settings = settingmap;
     }
     
+    // saveChart is a stub and should only be implemented by subclasses
     public void saveChart(JFreeChart chart, String filename){
+        throw new NotImplementedException();
     }
 }

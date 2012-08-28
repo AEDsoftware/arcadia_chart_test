@@ -1,12 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package chart_test_jfree;
-/**
- *
- * @author Alex
- */
+
+// Maint_row_loader_db will be used to load data from the maint database
+// it is currently not implemented
 public class Maint_row_loader_db extends Maint_row_base implements Maint_row_loader {
     @Override
     public Maint_row[] loadData(){

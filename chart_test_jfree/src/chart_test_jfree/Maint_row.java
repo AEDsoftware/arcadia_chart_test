@@ -1,13 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package chart_test_jfree;
 
-/**
- *
- * @author Alex
- */
+// Maint_row is the core object for storing maintenance data
 public class Maint_row {
     public String message_id = null;
     public String start_time = null;
@@ -21,6 +14,8 @@ public class Maint_row {
     private Chart_time end_chart_time = null;
     private Chart_time error_chart_time = null;
     
+    // getStartTime, getEndTime, and getErrorTime translate the appropriate string into a Chart_time object
+    // can probable be genericized into a single method
     public Chart_time getStartTime(){
         Chart_time result;
         if((start_chart_time == null) && (start_time != null) && (!start_time.equals("(null)")) && (!start_time.equals(""))){

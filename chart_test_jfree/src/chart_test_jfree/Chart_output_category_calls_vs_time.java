@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package chart_test_jfree;
 
 import java.util.HashMap;
@@ -12,51 +8,68 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-/**
- *
- * @author Alex
- */
+// Chart_output_category_calls_vs_time is a subclass of Chart_output_base
+// this class creates a category chart (x-y line chart)
+// it maps the time taken by calls, in 100 millisecond buckets, to the # of calls that took that amount of time
 public class Chart_output_category_calls_vs_time extends Chart_output_base {
-
-    Chart_output_category_calls_vs_time(HashMap settings) {
+    
+    public Chart_output_category_calls_vs_time(HashMap settings) {
         super(settings);
     }
     
+    // outputMultipleCharts is used when the user requires seperate charts for each service
     @Override
     public void outputMultipleCharts(Maint_row[][] data){
+        // we iterate through the sub-arrays of the input...
         for(Maint_row[] chart : data){
+            // some string manipulation is done to get a unique output name reflecting the service
             String service_name = chart[0].service_name;
             HashMap settings = super.getSettings();
             String output_file = (String)settings.get("output_file");
-            String output_replacement = "_" + service_name + ".jpeg";
-            output_file = output_file.replace(".jpeg", output_replacement);
+            String output_replacement = "_" + service_name + ".";
+            output_file = output_file.replace(".", output_replacement);
+            
+            // then, we just output a single chart as normal
             outputSingleChart(chart, output_file);
         }
     }
     
+    // outputSingleChart takes an array of maint data and a file name and creates output
     @Override
     public void outputSingleChart(Maint_row[] data, String output_file){
-        //double[] time_array = getDoubleData(data);
+        // transform the input data into a trimmed bucket array
         int threshold;
         threshold = Integer.parseInt((String)super.getSettings().get("trim_threshold"));
         int max;
         max = Integer.parseInt((String)super.getSettings().get("trim"));
         Bucket[] time_array = Bucket.getTrimmedBucket(data, max, threshold);
+        
+        // get a dataset
         CategoryDataset set = createDataset(time_array);
+        
+        // create the chart
         JFreeChart chart = createChart(set);
+        
+        // use the saver functions to save the chart to output
         super.getSaver().saveChart(chart, output_file);
     }
     
+    // createDataset converts a Bucket array into a CategoryDataset
     private CategoryDataset createDataset(Bucket[] data) {
+        // this type of chart uses only 1 "series" (or line)
         String series1 = "# of calls / time taken";
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for(Bucket bucket : data){
+            // for each Bucket, we add a value point to "series1"; this maps the call_count and time_span to the data set
             dataset.addValue((Number)bucket.call_count, series1, bucket.time_span);
         }
         return dataset;
     }
     
+    // createChart turns a dataset into a chart
     private JFreeChart createChart(CategoryDataset data){
+        // the basic chart constructer in ChartFactory takes a CategoryDataset and some other inputs and returns a line chart
+        // "Line Chart Demo 1" should be changed to something better!
         JFreeChart chart = ChartFactory.createLineChart(
         "Line Chart Demo 1", // chart title
         "Time Taken", // domain axis label
@@ -67,32 +80,13 @@ public class Chart_output_category_calls_vs_time extends Chart_output_base {
         true, // tooltips
         false // urls
         );
+        // we do some manipulation to limit the number of ticks shown on the horizontal axis; this preserves readability in large data sets
+        // we do this by using a special axis (SpareslyLabeledCategoryAxis) which supreses the extra ticks
         CategoryPlot plot = chart.getCategoryPlot();
-        //CategoryAxis axis = plot.getDomainAxis();
         int num_ticks = Integer.parseInt((String)super.getSettings().get("max_ticks"));
         SpareslyLabeledCategoryAxis axis_new;
         axis_new = new SpareslyLabeledCategoryAxis(num_ticks);
         axis_new.setMaximumCategoryLabelWidthRatio(3f);
-        
-        /*axis_new.setAxisLinePaint(axis.getAxisLinePaint());
-        axis_new.setAxisLineStroke(axis.getAxisLineStroke());
-        axis_new.setAxisLineVisible(axis.isAxisLineVisible());
-        axis_new.setCategoryLabelPositionOffset(axis.getCategoryLabelPositionOffset());
-        axis_new.setCategoryLabelPositions(axis.getCategoryLabelPositions());
-        axis_new.setFixedDimension(axis.getFixedDimension());
-        axis_new.setLabel(axis.getLabel());
-        axis_new.setLabelAngle(axis.getLabelAngle());
-        axis_new.setLabelFont(axis.getLabelFont());
-        axis_new.setLabelInsets(axis.getLabelInsets());
-        axis_new.setLabelPaint(axis.getLabelPaint());
-        axis_new.setLowerMargin(axis.getLowerMargin());
-        axis_new.setMaximumCategoryLabelLines(axis.getMaximumCategoryLabelLines());
-        axis_new.setMaximumCategoryLabelWidthRatio(axis.getMaximumCategoryLabelWidthRatio());
-        axis_new.setMinorTickMarkInsideLength(axis.getMinorTickMarkInsideLength());
-        axis_new.setMinorTickMarkOutsideLength(axis.getMinorTickMarkOutsideLength());
-        axis_new.setMinorTickMarksVisible(axis.isMinorTickMarksVisible());
-        axis_new.setPlot(axis.getPlot());
-        */
         plot.setDomainAxis(axis_new);
         return chart;
     }

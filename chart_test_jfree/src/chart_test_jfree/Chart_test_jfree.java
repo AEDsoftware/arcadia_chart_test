@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package chart_test_jfree;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -10,46 +6,44 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- *
- * @author Alex
- */
+// Chart_test_jfree is the core class for the charts project
 public class Chart_test_jfree {
-
-    /**
-     * @param args the command line arguments
-     */
     private static HashMap settings = new HashMap();
     private static Chart_output_base output;
     
+    // main is the core method that orchestrates the loading, processing, and output of the data
     public static void main(String[] args) {
+        // ideally, we can get the setting file name from args so that this isn't platform dependant
+        // we load the settings and data
         loadSettings("C:/Users/Alex/Documents/GitHub/arcadia_chart_test/data/settings.txt");      
         Maint_row[] data = loadData();
         if(data == null){
             return;
         }
-        String is_seperate = (String)settings.get("seperate_charts");
-        String output_type = (String)settings.get("chart_type");
-        switch (output_type){
+        
+        // we start by checking the chart_type and loading the appropriate Chart_output...
+        switch ((String)settings.get("chart_type")){
             case "category_calls_time" : output = new Chart_output_category_calls_vs_time(settings);
                 break;
         }
-        if(is_seperate.equals("true")){
+        
+        String seperate = (String)settings.get("seperate_charts");
+        if(seperate.equals("true")){
+            // if the settings require seperate charts, we split the data by service name, then normalize each row and output all rows
             Maint_row[][] new_data = splitData(data);
             for(Maint_row[] row : new_data){
                 row = normalizeData(row);
             }
             output.outputMultipleCharts(new_data);
         } else{
+            // otherwise, we simply normalize and output the data
             String output_file = (String)settings.get("output_file");
             data = normalizeData(data);
             output.outputSingleChart(data, output_file);
         }
-        
-        //String output = generateChart(time_array);
-        String debug = "true";
     }
     
+    // loadSettings opens and maps the settings file
     public static void loadSettings(String setting_file){
         CSVReader reader;
         List<String[]> my_entries;
@@ -58,19 +52,20 @@ public class Chart_test_jfree {
             reader = new CSVReader(new FileReader(setting_file));
             my_entries = reader.readAll();
             for(int i = 0; i < my_entries.size(); i++){
+                // ignore blank lines and lines beginning with !--
                 if(my_entries.get(i)[0].equals("") || my_entries.get(i)[0].contains("!--")){
-                    boolean debug1 = true;
                 } else{
+                    // Map the setting and value into the setting object
                     Object key = my_entries.get(i)[0];
                     Object value = my_entries.get(i)[1];
                     settings.put(key, value);
                 }
             }
         } catch(Exception e){
-            boolean debug = true;
         }
     }
     
+    //loadData loads the data from the chosen source
     public static Maint_row[] loadData(){
         Maint_row_loader loader;
         Maint_row[] data = null;
@@ -84,12 +79,14 @@ public class Chart_test_jfree {
         return data;
     }
     
+    //splitData takes a single array of Maint_rows and splits it by service name
     public static Maint_row[][] splitData(Maint_row[] data){
         String services = (String)settings.get("service_list");
         Maint_row[][] new_data;
         List<String> chosen_services = new ArrayList<>();
         
         if(services != null){
+            // split services by @ and add to the list
             String[] services_temp = services.split("@");
             for(String service : services_temp){
                 if(!service.equals("")){
@@ -98,9 +95,12 @@ public class Chart_test_jfree {
             }
         }
         
+        // initialize new data array
         new_data = new Maint_row[chosen_services.size()][];
         int count = 0;
         List<Maint_row> temp_rows;
+        // loop through services
+        // can probably be more efficient by only looping through data and mapping that way
         for(String service : chosen_services){
             temp_rows = new ArrayList<>();
             for(Maint_row row : data){
@@ -115,34 +115,10 @@ public class Chart_test_jfree {
         return new_data;
     }
     
-    /*public static Maint_row[] loadDataFromDatabase(){
-        Maint_row[] data_array;
-        
-        try{
-            // Open DB Connection
-            // Create query to select rows
-            // my_entries = run query
-            data_array = new Maint_row[my_entries.size() - 1];
-            for(int i = 1; i < my_entries.size(); i++){
-                Maint_row temp_data = new Maint_row();
-                temp_data.message_id = my_entries.get(i)[0];
-                temp_data.start_time = my_entries.get(i)[1];
-                temp_data.end_time = my_entries.get(i)[2];
-                temp_data.error_time = my_entries.get(i)[3];
-                temp_data.service_name = my_entries.get(i)[4];
-                temp_data.source_name = my_entries.get(i)[5];
-                temp_data.error_message = my_entries.get(i)[6];
-                data_array[i - 1] = temp_data;
-            }
-        } catch(Exception e){
-            data_array = null;
-        }
-        
-        return data_array;
-    }*/
-    
+    // normalizeData takes an array of Maint_rows and performs some cleanup
     public static Maint_row[] normalizeData(Maint_row[] data){
         for(Maint_row item : data){
+            // for each row, if error_message or _time are blank, set them to "(null)"
             if(item.error_message.equals("")){
                 item.error_message = "(null)";
             }
@@ -151,9 +127,11 @@ public class Chart_test_jfree {
                 item.error_time = "(null)";
             }
             
-            Chart_time start = item.getStartTime();
-            Chart_time end = item.getEndTime();
-            Chart_time error = item.getErrorTime();
+            // for each of start, end, and error time call the proper command
+            // this converts the times from strings to objects if neccessary
+            item.getStartTime();
+            item.getEndTime();
+            item.getErrorTime();
         }
         return data;
     }

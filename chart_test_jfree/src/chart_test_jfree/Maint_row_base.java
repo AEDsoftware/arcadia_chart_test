@@ -1,13 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package chart_test_jfree;
 import java.util.HashMap;
-/**
- *
- * @author Alex
- */
+
+// Maint_row_base implements settings... should probably be factored out into a single object for everything that uses settings
 public class Maint_row_base {
     private HashMap settings;
     

@@ -1,13 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package chart_test_jfree;
 
-/**
- *
- * @author Alex
- */
+// Chart_time is a convenience class that contains the various values for the time in seperate fields
 public class Chart_time {
     public String year;
     public String month;
@@ -17,6 +10,7 @@ public class Chart_time {
     public String second;
     public boolean isAM = true;
     
+    // fromString splits a string into the required composite parts
     public static Chart_time fromString(String date_time){
         Chart_time result = new Chart_time();
         if(date_time.equals("")){
