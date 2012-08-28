@@ -21,7 +21,7 @@ public class Maint_row_loader_csv extends Maint_row_base implements Maint_row_lo
         CSVReader reader;
         List<String[]> my_entries;
         HashMap settings = super.getSettings();
-        String filename = (String)settings.get("csv_input_file");
+        String filename = (String)settings.get("input_file");
         String services = (String)settings.get("service_list");
         boolean any_service = true;
         List<String> chosen_services = new ArrayList<>();

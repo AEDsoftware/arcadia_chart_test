@@ -27,7 +27,7 @@ public class Chart_output_category_calls_vs_time extends Chart_output_base {
         for(Maint_row[] chart : data){
             String service_name = chart[0].service_name;
             HashMap settings = super.getSettings();
-            String output_file = (String)settings.get("jpeg_output_file");
+            String output_file = (String)settings.get("output_file");
             String output_replacement = "_" + service_name + ".jpeg";
             output_file = output_file.replace(".jpeg", output_replacement);
             outputSingleChart(chart, output_file);
@@ -44,7 +44,7 @@ public class Chart_output_category_calls_vs_time extends Chart_output_base {
         Bucket[] time_array = Bucket.getTrimmedBucket(data, max, threshold);
         CategoryDataset set = createDataset(time_array);
         JFreeChart chart = createChart(set);
-        saveChart(chart, output_file);
+        super.getSaver().saveChart(chart, output_file);
     }
     
     private CategoryDataset createDataset(Bucket[] data) {

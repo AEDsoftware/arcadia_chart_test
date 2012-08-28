@@ -4,12 +4,7 @@
  */
 package chart_test_jfree;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.chart.JFreeChart;
 
 /**
  *
@@ -17,6 +12,7 @@ import org.jfree.chart.JFreeChart;
  */
 public class Chart_output_base {
     private HashMap settings;
+    private Chart_saver saver;
     
     public Chart_output_base(){
         
@@ -24,11 +20,16 @@ public class Chart_output_base {
     
     public Chart_output_base(HashMap settings){
         this();
-        this.settings = settings;
+        this.setSettings(settings);
     }
     
-    public void settings(HashMap settings){
+    public void setSettings(HashMap settings){
         this.settings = settings;
+        String output_type = (String)settings.get("output");
+        switch (output_type){
+            case "jpeg" : saver = new Chart_saver_jpeg(settings);
+                break;
+        }
     }
     
     public HashMap getSettings(){
@@ -43,15 +44,7 @@ public class Chart_output_base {
         
     }
     
-    public void saveChart(JFreeChart chart, String filename){
-        try{
-            try (OutputStream output = new FileOutputStream(filename)) {
-                int width = (int) Integer.parseInt((String)settings.get("jpeg_width"));
-                int height = (int) Integer.parseInt((String)settings.get("jpeg_height"));
-                ChartUtilities.writeChartAsJPEG(output, chart, width, height);
-            }
-        } catch(NumberFormatException | IOException e){
-            boolean debug = true;
-        }
+    public Chart_saver getSaver(){
+        return saver;
     }
 }
