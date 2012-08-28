@@ -18,7 +18,7 @@ public class Chart_output_base extends Setting_manager {
     
     @Override
     public final void setSettings(HashMap settings){
-        super.setSettings(settings);
+        this.settings = settings;
 
         // when settings are loaded, we use the "output" variable to determine which type of Chart_saver to instantiate
         String output_type = (String)settings.get("output");

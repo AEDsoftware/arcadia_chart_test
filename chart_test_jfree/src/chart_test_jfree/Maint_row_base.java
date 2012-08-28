@@ -1,5 +1,6 @@
 package chart_test_jfree;
 
-// Maint_row_base implements settings... should probably be factored out into a single object for everything that uses settings
+// Maint_row_base is a parent class bridging the gap between Setting_manager and the maint row loaders
+// May add futher functionality in future
 public class Maint_row_base extends Setting_manager {
 }
