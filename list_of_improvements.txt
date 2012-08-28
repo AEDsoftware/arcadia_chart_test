@@ -1,0 +1,7 @@
+(In no order)
+Convert settings to XML or database
+Add editor for settings
+Add scheduling functions
+Make chart look nicer
+Add other output types (XML, PDF, Java UI)
+Add other chart types
