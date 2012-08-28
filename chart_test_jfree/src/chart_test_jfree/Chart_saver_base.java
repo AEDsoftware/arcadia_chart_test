@@ -5,17 +5,7 @@ import org.jfree.chart.JFreeChart;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 // Chart_saver is a simple base class for all chart savers
-public class Chart_saver_base {
-    private HashMap settings;
-    
-    public void setSettings(HashMap settings){
-        this.settings = settings;
-    }
-    
-    public HashMap getSettings(){
-        return settings;
-    }
-    
+public class Chart_saver_base extends Setting_manager {
     public Chart_saver_base(){
         
     }

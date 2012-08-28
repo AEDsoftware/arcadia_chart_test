@@ -72,7 +72,7 @@ public class Chart_test_jfree {
         String source = (String)settings.get("source");
         switch (source){
             case "csv" : loader = new Maint_row_loader_csv();
-                loader.settings(settings);
+                loader.setSettings(settings);
                 data = loader.loadData();
                 break;
         }
