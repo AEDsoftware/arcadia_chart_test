@@ -1,11 +1,10 @@
 package chart_test_jfree;
 
 import java.util.HashMap;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 // Chart_output_base is just a parent class for all of the output classes
 // Each output class will represent a different type of chart (aka a way of displaying the data gathered)
-public class Chart_output_base extends Setting_manager {
+public abstract class Chart_output_base extends Setting_manager {
     private Chart_saver_base saver;
     
     public Chart_output_base(){
@@ -25,17 +24,15 @@ public class Chart_output_base extends Setting_manager {
         switch (output_type){
             case "jpeg" : saver = new Chart_saver_jpeg(settings);
                 break;
+            case "csv" : saver = new Chart_saver_csv(settings);
+                break;
         }
     }
     
     // outputSingleChart and outputMultipleCharts are placeholders, to be implented by subclass
-    public void outputSingleChart(Maint_row[] data, String output_file){
-        throw new NotImplementedException();
-    }
+    public abstract void outputSingleChart(Maint_row[] data, String output_file);
     
-    public void outputMultipleCharts(Maint_row[][] data){
-        throw new NotImplementedException();
-    }
+    public abstract void outputMultipleCharts(Maint_row[][] data);
     
     public Chart_saver_base getSaver(){
         return saver;

@@ -23,7 +23,11 @@ public class Chart_test_jfree {
         
         // we start by checking the chart_type and loading the appropriate Chart_output...
         switch ((String)settings.get("chart_type")){
-            case "category_calls_time" : output = new Chart_output_category_calls_vs_time(settings);
+            case "category_calls_time" :
+                output = new Chart_output_category_calls_vs_time(settings);
+                break;
+            case "csv_data" :
+                //output = new Chart_output_csv_calls_vs_time(settings);
                 break;
         }
         
