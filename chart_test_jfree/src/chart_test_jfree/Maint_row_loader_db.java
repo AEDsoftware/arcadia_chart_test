@@ -2,7 +2,7 @@ package chart_test_jfree;
 
 // Maint_row_loader_db will be used to load data from the maint database
 // it is currently not implemented
-public class Maint_row_loader_db extends Maint_row_base implements Maint_row_loader {
+public class Maint_row_loader_db extends Maint_row_loader_base implements Maint_row_loader {
     @Override
     public Maint_row[] loadData(){
         Maint_row[] data_array = null;

@@ -6,5 +6,5 @@ import java.util.HashMap;
 
 public interface Maint_row_loader {
     public Maint_row[] loadData();
-    public void setSettings(HashMap settings);
+    public void setSettings(HashMap<String, String> settings);
 }

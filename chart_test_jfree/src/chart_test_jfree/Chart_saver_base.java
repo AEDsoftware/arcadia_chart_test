@@ -9,7 +9,7 @@ public abstract class Chart_saver_base extends Setting_manager {
         
     }
     
-    public Chart_saver_base(HashMap settingmap){
+    public Chart_saver_base(HashMap<String, String> settingmap){
         settings = settingmap;
     }
     

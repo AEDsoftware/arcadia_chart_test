@@ -13,7 +13,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 // it maps the time taken by calls, in 100 millisecond buckets, to the # of calls that took that amount of time
 public class Chart_output_category_calls_vs_time extends Chart_output_base {
     
-    public Chart_output_category_calls_vs_time(HashMap settings) {
+    public Chart_output_category_calls_vs_time(HashMap<String, String> settings) {
         super(settings);
     }
     
@@ -24,7 +24,7 @@ public class Chart_output_category_calls_vs_time extends Chart_output_base {
         for(Maint_row[] chart : data){
             // some string manipulation is done to get a unique output name reflecting the service
             String service_name = chart[0].service_name;
-            String output_file = (String)settings.get("output_file");
+            String output_file = settings.get("output_file");
             String output_replacement = "_" + service_name + ".";
             output_file = output_file.replace(".", output_replacement);
             
@@ -38,9 +38,9 @@ public class Chart_output_category_calls_vs_time extends Chart_output_base {
     public void outputSingleChart(Maint_row[] data, String output_file){
         // transform the input data into a trimmed bucket array
         int threshold;
-        threshold = Integer.parseInt((String)settings.get("trim_threshold"));
+        threshold = Integer.parseInt(settings.get("trim_threshold"));
         int max;
-        max = Integer.parseInt((String)settings.get("trim"));
+        max = Integer.parseInt(settings.get("trim"));
         Bucket[] time_array = Bucket.getTrimmedBucket(data, max, threshold);
         
         // get a dataset
@@ -82,7 +82,7 @@ public class Chart_output_category_calls_vs_time extends Chart_output_base {
         // we do some manipulation to limit the number of ticks shown on the horizontal axis; this preserves readability in large data sets
         // we do this by using a special axis (SpareslyLabeledCategoryAxis) which supreses the extra ticks
         CategoryPlot plot = chart.getCategoryPlot();
-        int num_ticks = Integer.parseInt((String)settings.get("max_ticks"));
+        int num_ticks = Integer.parseInt(settings.get("max_ticks"));
         SpareslyLabeledCategoryAxis axis_new;
         axis_new = new SpareslyLabeledCategoryAxis(num_ticks);
         axis_new.setMaximumCategoryLabelWidthRatio(3f);

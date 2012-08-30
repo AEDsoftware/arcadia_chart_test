@@ -15,8 +15,8 @@ public class Chart_saver_jpeg extends Chart_saver_base {
             // we try to open a file stream on the output file name; if sucessful, we set the width and height
             // we then use ChartUtilities to write the chart as a JPEG
             try (OutputStream output = new FileOutputStream(filename)) {
-                int width = (int) Integer.parseInt((String)settings.get("jpeg_width"));
-                int height = (int) Integer.parseInt((String)settings.get("jpeg_height"));
+                int width = (int) Integer.parseInt(settings.get("jpeg_width"));
+                int height = (int) Integer.parseInt(settings.get("jpeg_height"));
                 ChartUtilities.writeChartAsJPEG(output, chart, width, height);
             }
         } catch(NumberFormatException | IOException e){
@@ -27,7 +27,7 @@ public class Chart_saver_jpeg extends Chart_saver_base {
         super();
     }
     
-    public Chart_saver_jpeg(HashMap settings){
+    public Chart_saver_jpeg(HashMap<String, String> settings){
         super(settings);
     }
 }

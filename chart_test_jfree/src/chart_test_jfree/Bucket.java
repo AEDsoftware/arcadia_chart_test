@@ -26,7 +26,7 @@ public class Bucket {
     
     // getDataCallsPerTimeBucket converts an array of maintenance data into an array of Buckets
     private static Bucket[] getDataCallsPerTimeBucket(Maint_row[] data){
-        HashMap map = new HashMap();
+        HashMap<Integer, Integer> map = new HashMap();
         Integer map_result;
         int count = 0;
         // loop through and process all maintenance rows
@@ -71,7 +71,7 @@ public class Bucket {
             time = (((time + 50) / 100) * 100);
             
             // we ensure that we're using an int value if the given time hasn't been used yet
-            map_result = (Integer)map.get(time);
+            map_result = map.get(time);
             if(map_result == null){
                 map_result = 0;
             }
@@ -83,11 +83,11 @@ public class Bucket {
         }
         
         // we do some transformation to turn the map into a list
-        ArrayList key_list = new ArrayList(map.keySet());
+        ArrayList<Integer> key_list = new ArrayList(map.keySet());
         Collections.sort(key_list);
         Bucket[] bucket_array = new Bucket[key_list.size()];
         for(int i = 0; i < key_list.size(); i++){
-            bucket_array[i] = new Bucket((int)key_list.get(i), (int)map.get(key_list.get(i)));
+            bucket_array[i] = new Bucket(key_list.get(i), map.get(key_list.get(i)));
         }
         return bucket_array;
     }

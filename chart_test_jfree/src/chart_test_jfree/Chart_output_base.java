@@ -10,17 +10,17 @@ public abstract class Chart_output_base extends Setting_manager {
     public Chart_output_base(){
     }
     
-    public Chart_output_base(HashMap settings){
+    public Chart_output_base(HashMap<String, String> settings){
         this();
         this.setSettings(settings);
     }
     
     @Override
-    public final void setSettings(HashMap settings){
+    public final void setSettings(HashMap<String, String> settings){
         this.settings = settings;
 
         // when settings are loaded, we use the "output" variable to determine which type of Chart_saver to instantiate
-        String output_type = (String)settings.get("output");
+        String output_type = settings.get("output");
         switch (output_type){
             case "jpeg" : saver = new Chart_saver_jpeg(settings);
                 break;

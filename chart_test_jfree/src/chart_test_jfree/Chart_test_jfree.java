@@ -8,7 +8,7 @@ import java.util.List;
 
 // Chart_test_jfree is the core class for the charts project
 public class Chart_test_jfree {
-    private static HashMap settings = new HashMap();
+    private static HashMap<String, String> settings = new HashMap();
     private static Chart_output_base output;
     
     // main is the core method that orchestrates the loading, processing, and output of the data
@@ -22,7 +22,7 @@ public class Chart_test_jfree {
         }
         
         // we start by checking the chart_type and loading the appropriate Chart_output...
-        switch ((String)settings.get("chart_type")){
+        switch (settings.get("chart_type")){
             case "category_calls_time" :
                 output = new Chart_output_category_calls_vs_time(settings);
                 break;
@@ -31,7 +31,7 @@ public class Chart_test_jfree {
                 break;
         }
         
-        String seperate = (String)settings.get("seperate_charts");
+        String seperate = settings.get("seperate_charts");
         if(seperate.equals("true")){
             // if the settings require seperate charts, we split the data by service name, then normalize each row and output all rows
             Maint_row[][] new_data = splitData(data);
@@ -41,7 +41,7 @@ public class Chart_test_jfree {
             output.outputMultipleCharts(new_data);
         } else{
             // otherwise, we simply normalize and output the data
-            String output_file = (String)settings.get("output_file");
+            String output_file = settings.get("output_file");
             data = normalizeData(data);
             output.outputSingleChart(data, output_file);
         }
@@ -60,8 +60,8 @@ public class Chart_test_jfree {
                 if(my_entries.get(i)[0].equals("") || my_entries.get(i)[0].contains("!--")){
                 } else{
                     // Map the setting and value into the setting object
-                    Object key = my_entries.get(i)[0];
-                    Object value = my_entries.get(i)[1];
+                    String key = my_entries.get(i)[0];
+                    String value = my_entries.get(i)[1];
                     settings.put(key, value);
                 }
             }
@@ -73,7 +73,7 @@ public class Chart_test_jfree {
     public static Maint_row[] loadData(){
         Maint_row_loader loader;
         Maint_row[] data = null;
-        String source = (String)settings.get("source");
+        String source = settings.get("source");
         switch (source){
             case "csv" : loader = new Maint_row_loader_csv();
                 loader.setSettings(settings);
@@ -85,7 +85,7 @@ public class Chart_test_jfree {
     
     //splitData takes a single array of Maint_rows and splits it by service name
     public static Maint_row[][] splitData(Maint_row[] data){
-        String services = (String)settings.get("service_list");
+        String services = settings.get("service_list");
         Maint_row[][] new_data;
         List<String> chosen_services = new ArrayList<>();
         

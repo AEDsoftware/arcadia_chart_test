@@ -33,7 +33,7 @@ public class Chart_saver_csv extends Chart_saver_base {
         super();
     }
     
-    public Chart_saver_csv(HashMap settings){
+    public Chart_saver_csv(HashMap<String, String> settings){
         super(settings);
     }
 }

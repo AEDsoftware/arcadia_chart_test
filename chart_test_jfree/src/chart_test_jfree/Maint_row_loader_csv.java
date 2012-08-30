@@ -3,11 +3,10 @@ package chart_test_jfree;
 import au.com.bytecode.opencsv.CSVReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 // Maint_row_loader_csv is the proper loader for csv files
-public class Maint_row_loader_csv extends Maint_row_base implements Maint_row_loader {
+public class Maint_row_loader_csv extends Maint_row_loader_base implements Maint_row_loader {
     // loadData is the core method of Maint_row_loader
     // it opens the csv file and loads all rows into an appropriate Maint_row object
     @Override
@@ -15,10 +14,10 @@ public class Maint_row_loader_csv extends Maint_row_base implements Maint_row_lo
         List<Maint_row> data_array = new ArrayList<>();
         CSVReader reader;
         List<String[]> my_entries;
-        String filename = (String)settings.get("input_file");
+        String filename = settings.get("input_file");
         
         // check to see if services where chosen
-        String services = (String)settings.get("service_list");
+        String services = settings.get("service_list");
         boolean any_service = true;
         List<String> chosen_services = new ArrayList<>();
         if(services != null){
