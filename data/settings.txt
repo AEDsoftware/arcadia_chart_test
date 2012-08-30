@@ -2,7 +2,7 @@
 !-- blank lines are also ignored
 
 !-- general settings
-source,csv
+source,db
 data_folder,C:/Users/Alex/Documents/GitHub/arcadia_chart_test/data/
 input_file,monitor.csv
 output,jpeg

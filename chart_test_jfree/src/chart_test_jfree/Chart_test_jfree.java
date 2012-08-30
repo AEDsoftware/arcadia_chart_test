@@ -71,14 +71,19 @@ public class Chart_test_jfree {
     
     //loadData loads the data from the chosen source
     public static Maint_row[] loadData(){
-        Maint_row_loader loader;
+        Maint_row_loader loader = null;
         Maint_row[] data = null;
         String source = settings.get("source");
         switch (source){
             case "csv" : loader = new Maint_row_loader_csv();
-                loader.setSettings(settings);
-                data = loader.loadData();
-                break;
+            break;
+                
+            case "db" : loader = new Maint_row_loader_db();
+            break;
+        }
+        if(loader != null){
+            loader.setSettings(settings);
+            data = loader.loadData();
         }
         return data;
     }
