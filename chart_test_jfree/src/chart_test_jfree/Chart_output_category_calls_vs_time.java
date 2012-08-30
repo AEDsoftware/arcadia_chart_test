@@ -42,7 +42,12 @@ public class Chart_output_category_calls_vs_time extends Chart_output_base {
         int max;
         max = Integer.parseInt(settings.get("trim"));
         boolean show_percentiles = Boolean.parseBoolean(settings.get("with_percentiles"));
-        Bucket[] time_array = Bucket.getDataCallsPerTimeBucket(data);
+        boolean pad_buckets = Boolean.parseBoolean(settings.get("pad_buckets"));
+        int bucket_size = Integer.parseInt(settings.get("bucket_size"));
+        Bucket[] time_array = Bucket.getDataCallsPerTimeBucket(data, bucket_size);
+        if(pad_buckets){
+            time_array = Bucket.padBuckets(time_array, bucket_size);
+        }
         if(show_percentiles){
             Bucket.writePercentiles(time_array, settings.get("data_folder"));
         }

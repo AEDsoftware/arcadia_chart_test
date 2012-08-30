@@ -8,6 +8,8 @@ import java.util.HashMap;
 import org.jfree.data.category.CategoryDataset;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.List;
 
 // Bucket is a class for holding a time span and a corresponding call count
 public class Bucket {
@@ -24,7 +26,7 @@ public class Bucket {
     }
     
     // getDataCallsPerTimeBucket converts an array of maintenance data into an array of Buckets
-    public static Bucket[] getDataCallsPerTimeBucket(Maint_row[] data){
+    public static Bucket[] getDataCallsPerTimeBucket(Maint_row[] data, int bucket_size){
         HashMap<Integer, Integer> map = new HashMap();
         Integer map_result;
         int count = 0;
@@ -67,7 +69,9 @@ public class Bucket {
             }
             
             // we round the time to the nearest hundred (may change to use a setting in later version)
-            time = (((time + 50) / 100) * 100);
+            int half = bucket_size / 2;
+            //time = (((time + half) / bucket_size) * bucket_size);
+            time = (time / bucket_size) * bucket_size;
             
             // we ensure that we're using an int value if the given time hasn't been used yet
             map_result = map.get(time);
@@ -127,6 +131,29 @@ public class Bucket {
             new_data[i] = data[i];
         }
         return new_data;
+    }
+    
+    public static Bucket[] padBuckets(Bucket[] data, int bucket_size){
+        HashMap<Integer,Integer> bucket_map;
+        bucket_map = new HashMap<>();
+        for(int i = 0; i < data[data.length - 1].time_span; i = i + bucket_size){
+            bucket_map.put(i, 0);
+        }
+        
+        for(Bucket bucket : data){
+            bucket_map.put(bucket.time_span, bucket.call_count);
+        }
+        
+        Integer[] keys = bucket_map.keySet().toArray(new Integer[0]);
+        Arrays.sort(keys);
+        
+        Bucket[] output = new Bucket[keys.length];
+        for(int i = 0; i < keys.length; i++){
+            output[i] = new Bucket();
+            output[i].time_span = keys[i];
+            output[i].call_count = bucket_map.get(keys[i]);
+        }
+        return output;
     }
     
     public static void writePercentiles(Bucket[] data, String output_folder){

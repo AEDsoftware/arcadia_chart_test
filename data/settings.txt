@@ -8,14 +8,16 @@ input_file,monitor.csv
 output,jpeg
 output_file,output.jpeg
 max_ticks,15
+bucket_size,100
+pad_buckets,true
 chart_type,category_calls_time
 
 !-- analysis settings
 with_percentiles,true
 
 !-- trim settings
-trim,-1
-trim_threshold,5
+trim,0
+trim_threshold,2
 
 !-- multi-service settings
 service_list,

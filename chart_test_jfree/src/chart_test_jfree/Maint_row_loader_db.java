@@ -1,4 +1,6 @@
 package chart_test_jfree;
+import java.sql.*;
+import javax.sql.*;
 
 // Maint_row_loader_db will be used to load data from the maint database
 // it is currently not implemented
