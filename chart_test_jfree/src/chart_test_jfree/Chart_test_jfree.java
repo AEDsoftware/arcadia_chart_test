@@ -41,7 +41,7 @@ public class Chart_test_jfree {
             output.outputMultipleCharts(new_data);
         } else{
             // otherwise, we simply normalize and output the data
-            String output_file = settings.get("output_file");
+            String output_file = settings.get("data_folder") + settings.get("output_file");
             data = normalizeData(data);
             output.outputSingleChart(data, output_file);
         }

@@ -1,8 +1,13 @@
 package chart_test_jfree;
 
+import au.com.bytecode.opencsv.CSVWriter;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import org.jfree.data.category.CategoryDataset;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 // Bucket is a class for holding a time span and a corresponding call count
 public class Bucket {
@@ -18,14 +23,8 @@ public class Bucket {
         
     }
     
-    // getTrimmedBucket takes an array of maintenance data as well as a trim setting and threshold
-    // it calls getDataCallsPerTimeBucket, then calls trimBuckets on the result
-    public static Bucket[] getTrimmedBucket(Maint_row[] data, int trim, int threshold){
-        return trimBuckets(getDataCallsPerTimeBucket(data), trim, threshold);
-    }
-    
     // getDataCallsPerTimeBucket converts an array of maintenance data into an array of Buckets
-    private static Bucket[] getDataCallsPerTimeBucket(Maint_row[] data){
+    public static Bucket[] getDataCallsPerTimeBucket(Maint_row[] data){
         HashMap<Integer, Integer> map = new HashMap();
         Integer map_result;
         int count = 0;
@@ -93,7 +92,7 @@ public class Bucket {
     }
     
     // trimBuckets takes a Bucket array, a trim setting, and a threshold
-    private static Bucket[] trimBuckets(Bucket[] data, int max, int threshold){
+    public static Bucket[] trimBuckets(Bucket[] data, int max, int threshold){
         int maxAt = 0;
         
         // if the trim setting (max) is -1, no trim is performed
@@ -128,5 +127,40 @@ public class Bucket {
             new_data[i] = data[i];
         }
         return new_data;
+    }
+    
+    public static void writePercentiles(Bucket[] data, String output_folder){
+        String filename;
+        filename = output_folder + "percentiles.csv";
+        try (CSVWriter writer = new CSVWriter(new FileWriter(filename), ',')) {
+            int total = 0;
+            int running_total = 0;
+            
+            for(Bucket bucket : data){
+                total = total + bucket.call_count;
+            }
+            
+            String[] temp_array = new String[3];
+            temp_array[0] = "Time Bucket";
+            temp_array[1] = "Number of Calls";
+            temp_array[2] = "Percentile";
+            writer.writeNext(temp_array);
+                
+            for(Bucket bucket : data){
+                temp_array = new String[3];
+                running_total = running_total + bucket.call_count;
+                double rt = running_total;
+                double t = total;
+                double percent = rt / t;
+                percent = percent * 100;
+                DecimalFormat twoDForm = new DecimalFormat("#.##");
+                percent = Double.valueOf(twoDForm.format(percent));
+                temp_array[0] = String.valueOf(bucket.time_span);
+                temp_array[1] = String.valueOf(bucket.call_count);
+                temp_array[2] = String.valueOf(percent);
+                writer.writeNext(temp_array);
+            }
+        } catch(Exception e){
+        }
     }
 }

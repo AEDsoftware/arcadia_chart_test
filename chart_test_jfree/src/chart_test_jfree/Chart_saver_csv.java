@@ -4,11 +4,12 @@
  */
 package chart_test_jfree;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import au.com.bytecode.opencsv.CSVWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.CategoryDataset;
 
 /**
  *
@@ -17,15 +18,32 @@ import org.jfree.chart.JFreeChart;
 public class Chart_saver_csv extends Chart_saver_base {
     @Override
     public void saveChart(JFreeChart chart, String filename){
-        try{
-            // we try to open a file stream on the output file name; if sucessful, we set the width and height
-            // we then use ChartUtilities to write the chart as a JPEG
-            try (OutputStream output = new FileOutputStream(filename)) {
-                // Get buckets from data in chart
-                // write to string
-                // output
+        if(Boolean.parseBoolean(settings.get("with_percentiles"))){
+            String percentile_file;
+            percentile_file = settings.get("data_folder") + "percentiles.csv";
+            File percentiles;
+            percentiles = new File(percentile_file);
+            File output = new File(filename);
+            boolean success = percentiles.renameTo(output);
+            return;
+        }
+        // we try to open a CSV writer on the output filename
+        // we then use ChartUtilities to write the chart as a CSV
+        try (CSVWriter writer = new CSVWriter(new FileWriter(filename), ',')) {
+            CategoryDataset data = chart.getCategoryPlot().getDataset();
+            String[] temp_array = new String[2];
+            temp_array[0] = "Time Bucket";
+            temp_array[1] = "Number of Calls";
+            writer.writeNext(temp_array);
+            
+            for(int i = 0; i < data.getColumnKeys().size(); i++){
+                temp_array = new String[2];
+                temp_array[0] = data.getColumnKey(i).toString();
+                temp_array[1] = data.getValue(0, i).toString();
+                writer.writeNext(temp_array);
             }
-        } catch(NumberFormatException | IOException e){
+        } catch(Exception e){
+            
         }
     }
     

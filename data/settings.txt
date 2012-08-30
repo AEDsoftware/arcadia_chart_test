@@ -3,14 +3,18 @@
 
 !-- general settings
 source,csv
-input_file,C:/Users/Alex/Documents/GitHub/arcadia_chart_test/data/monitor.csv
+data_folder,C:/Users/Alex/Documents/GitHub/arcadia_chart_test/data/
+input_file,monitor.csv
 output,jpeg
-output_file,C:/Users/Alex/Documents/GitHub/arcadia_chart_test/data/output.jpeg
+output_file,output.jpeg
 max_ticks,15
 chart_type,category_calls_time
 
+!-- analysis settings
+with_percentiles,true
+
 !-- trim settings
-trim,0
+trim,-1
 trim_threshold,5
 
 !-- multi-service settings

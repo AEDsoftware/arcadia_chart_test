@@ -24,7 +24,7 @@ public class Chart_output_category_calls_vs_time extends Chart_output_base {
         for(Maint_row[] chart : data){
             // some string manipulation is done to get a unique output name reflecting the service
             String service_name = chart[0].service_name;
-            String output_file = settings.get("output_file");
+            String output_file = settings.get("data_folder") + settings.get("output_file");
             String output_replacement = "_" + service_name + ".";
             output_file = output_file.replace(".", output_replacement);
             
@@ -41,7 +41,12 @@ public class Chart_output_category_calls_vs_time extends Chart_output_base {
         threshold = Integer.parseInt(settings.get("trim_threshold"));
         int max;
         max = Integer.parseInt(settings.get("trim"));
-        Bucket[] time_array = Bucket.getTrimmedBucket(data, max, threshold);
+        boolean show_percentiles = Boolean.parseBoolean(settings.get("with_percentiles"));
+        Bucket[] time_array = Bucket.getDataCallsPerTimeBucket(data);
+        if(show_percentiles){
+            Bucket.writePercentiles(time_array, settings.get("data_folder"));
+        }
+        time_array = Bucket.trimBuckets(time_array, max, threshold);
         
         // get a dataset
         CategoryDataset set = createDataset(time_array);
